@@ -8,25 +8,49 @@
     <style>
         body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); }
         .product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
-        .category { font-weight: bold; font-size: 1.2em; margin-top: 20px; color: var(--tg-theme-button-color); }
-        button { background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;}
+        
+        /* Style des boutons */
+        button { background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-size: 16px; font-weight: bold;}
+        .btn-retour { background-color: #555; margin-bottom: 20px; } /* Bouton gris pour le retour */
+        
         #cart { margin-top: 20px; padding-top: 20px; border-top: 2px solid #ccc; }
+        
+        /* LA MAGIE EST ICI : On cache les pages par défaut */
+        .page { display: none; }
+        /* On force la page des catégories à être visible au démarrage */
+        #page-categories { display: block; }
     </style>
 </head>
 <body>
 
-    <h2>Nos Produits</h2>
-
-    <div class="category">Hash</div>
-    <div class="product">
-        <p>Static - 90€</p>
-        <button onclick="addToCart('Static 10g', 15)">Ajouter au panier</button>
+    <div id="page-categories" class="page">
+        <h2>Que cherchez-vous ?</h2>
+        <button onclick="ouvrirPage('page-vetements')">👕 Vêtements</button>
+        <button onclick="ouvrirPage('page-accessoires')">🧢 Accessoires</button>
     </div>
 
-    <div class="category">Accessoires</div>
-    <div class="product">
-        <p>Casquette - 10€</p>
-        <button onclick="addToCart('Casquette', 10)">Ajouter au panier</button>
+    <div id="page-vetements" class="page">
+        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour aux catégories</button>
+        <h2>👕 Vêtements</h2>
+        
+        <div class="product">
+            <p>T-shirt Noir - 15€</p>
+            <button onclick="addToCart('T-shirt Noir', 15)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <p>Pull Gris - 30€</p>
+            <button onclick="addToCart('Pull Gris', 30)">Ajouter au panier</button>
+        </div>
+    </div>
+
+    <div id="page-accessoires" class="page">
+        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour aux catégories</button>
+        <h2>🧢 Accessoires</h2>
+        
+        <div class="product">
+            <p>Casquette - 10€</p>
+            <button onclick="addToCart('Casquette', 10)">Ajouter au panier</button>
+        </div>
     </div>
 
     <div id="cart">
@@ -35,13 +59,26 @@
     </div>
 
     <script>
-        // Initialiser l'app Telegram
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Ouvre l'app en grand
+        tg.expand(); 
 
         let cart = [];
         let total = 0;
 
+        // Fonction pour naviguer entre les "pages"
+        function ouvrirPage(idPage) {
+            // 1. On dit à toutes les sections de se cacher
+            let pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.style.display = 'none');
+            
+            // 2. On affiche uniquement la section qu'on a demandée
+            document.getElementById(idPage).style.display = 'block';
+            
+            // Petite option sympa : on remonte en haut de la page quand on change de catégorie
+            window.scrollTo(0, 0); 
+        }
+
+        // Fonction du panier (inchangée)
         function addToCart(name, price) {
             cart.push({name: name, price: price});
             total += price;
@@ -49,18 +86,17 @@
             document.getElementById('cart-count').innerText = cart.length;
             document.getElementById('cart-total').innerText = total;
 
-            // Afficher le bouton principal de Telegram en bas
             tg.MainButton.setText(`Valider la commande (${total}€)`);
             tg.MainButton.show();
         }
 
-        // Quand le client clique sur le gros bouton en bas
+        // Envoi au bot
         tg.MainButton.onClick(() => {
-            // On envoie le panier au bot
             tg.sendData(JSON.stringify(cart));
-            tg.close(); // Ferme la mini app
+            tg.close();
         });
     </script>
 </body>
-
 </html>
+</html>
+
