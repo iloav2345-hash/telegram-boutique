@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Boutique</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); }
+        .product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        .category { font-weight: bold; font-size: 1.2em; margin-top: 20px; color: var(--tg-theme-button-color); }
+        button { background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;}
+        #cart { margin-top: 20px; padding-top: 20px; border-top: 2px solid #ccc; }
+    </style>
+</head>
+<body>
+
+    <h2>Nos Produits</h2>
+
+    <div class="category">Vêtements</div>
+    <div class="product">
+        <p>T-shirt Noir - 15€</p>
+        <button onclick="addToCart('T-shirt Noir', 15)">Ajouter au panier</button>
+    </div>
+
+    <div class="category">Accessoires</div>
+    <div class="product">
+        <p>Casquette - 10€</p>
+        <button onclick="addToCart('Casquette', 10)">Ajouter au panier</button>
+    </div>
+
+    <div id="cart">
+        <h3>Panier (<span id="cart-count">0</span> articles)</h3>
+        <p>Total : <span id="cart-total">0</span>€</p>
+    </div>
+
+    <script>
+        // Initialiser l'app Telegram
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Ouvre l'app en grand
+
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            cart.push({name: name, price: price});
+            total += price;
+            
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-total').innerText = total;
+
+            // Afficher le bouton principal de Telegram en bas
+            tg.MainButton.setText(`Valider la commande (${total}€)`);
+            tg.MainButton.show();
+        }
+
+        // Quand le client clique sur le gros bouton en bas
+        tg.MainButton.onClick(() => {
+            // On envoie le panier au bot
+            tg.sendData(JSON.stringify(cart));
+            tg.close(); // Ferme la mini app
+        });
+    </script>
+</body>
+</html>
