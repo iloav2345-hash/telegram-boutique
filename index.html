@@ -6,56 +6,86 @@
     <title>Ma Boutique</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); }
-        .product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); margin-bottom: 100px; }
         
+        /* --- NOUVEAU : STYLE DU TITRE DE LA BOUTIQUE --- */
+        .shop-header { text-align: center; margin-bottom: 25px; }
+        .shop-title {
+            font-size: 2.5em; 
+            font-weight: bold;
+            /* Effet néon stylé */
+            background: linear-gradient(45deg, #33CAFF, #8a2be2);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+            margin: 0;
+        }
+        
+        .product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; text-align: center;}
+        
+        /* --- NOUVEAU : STYLE POUR LES PHOTOS --- */
+        .product-img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px; max-height: 200px; }
+
         /* Style des boutons */
         button { background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-size: 16px; font-weight: bold;}
-        .btn-retour { background-color: #555; margin-bottom: 20px; } /* Bouton gris pour le retour */
+        .btn-retour { background-color: #555; margin-bottom: 20px; } 
         
-        #cart { margin-top: 20px; padding-top: 20px; border-top: 2px solid #ccc; }
+        /* --- STYLE DU PANIER FIXE EN BAS --- */
+        #cart { 
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: var(--tg-theme-bg-color); padding: 15px;
+            border-top: 2px solid #ccc; box-shadow: 0 -5px 10px rgba(0,0,0,0.2);
+            box-sizing: border-box; z-index: 100;
+        }
+        #cart h3, #cart p { margin: 5px 0; text-align: center; }
         
-        /* LA MAGIE EST ICI : On cache les pages par défaut */
+        /* Navigation */
         .page { display: none; }
-        /* On force la page des catégories à être visible au démarrage */
         #page-categories { display: block; }
     </style>
 </head>
 <body>
 
+    <div class="shop-header">
+        <h1 class="shop-title">Nom Boutique</h1>
+    </div>
+
     <div id="page-categories" class="page">
-        <h2 style="color: red;">Que cherchez-vous ?</h2>
-        <button onclick="ouvrirPage('page-vetements')">🍫 Hash</button>
+        <h2 style="color: red; text-align: center;">Que cherchez-vous ?</h2>
+        <button onclick="ouvrirPage('page-produits1')">🍫 Hash</button>
         <button onclick="ouvrirPage('page-accessoires')">🧢 Accessoires</button>
     </div>
 
-    <div id="page-vetements" class="page">
+    <div id="page-produits1" class="page">
         <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour aux catégories</button>
-        <h2 style="color: red;">🍫 Hash</h2>
+        <h2 style="color: red; text-align: center;">🍫 Hash</h2>
         
         <div class="product">
-            <p>Static 10G - 90€</p>
-            <button onclick="addToCart('Static 10G', 90)">Ajouter au panier</button>
+            <img src="https://via.placeholder.com/300x200?text=Photo+Produit" alt="Produit A" class="product-img">
+            <p><strong>Static 10G - 90€</strong></p>
+            <button onclick="addToCart('Static', 90)">Ajouter au panier</button>
         </div>
         <div class="product">
-            <p>Bientot - ??€</p>
-            <button onclick="addToCart('Bientot', 0)">Ajouter au panier</button>
+            <img src="https://via.placeholder.com/300x200?text=Photo+Bientot" alt="Bientôt" class="product-img">
+            <p><strong>Bientôt - ??€</strong></p>
+            <button onclick="addToCart('Bientot 1', 0)">Ajouter au panier</button>
         </div>
     </div>
 
     <div id="page-accessoires" class="page">
         <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour aux catégories</button>
-        <h2>🧢 Accessoires</h2>
+        <h2 style="text-align: center;">🧢 Accessoires</h2>
         
         <div class="product">
-            <p>Bientot - ??€</p>
-            <button onclick="addToCart('Bientot', 0)">Ajouter au panier</button>
+            <img src="https://via.placeholder.com/300x200?text=Photo+Accessoire" alt="Accessoire" class="product-img">
+            <p><strong>Bientôt - ??€</strong></p>
+            <button onclick="addToCart('Bientot 2', 0)">Ajouter au panier</button>
         </div>
     </div>
 
     <div id="cart">
         <h3>Panier (<span id="cart-count">0</span> articles)</h3>
-        <p>Total : <span id="cart-total">0</span>€</p>
+        <p>Total : <strong><span id="cart-total">0</span>€</strong></p>
     </div>
 
     <script>
@@ -65,20 +95,13 @@
         let cart = [];
         let total = 0;
 
-        // Fonction pour naviguer entre les "pages"
         function ouvrirPage(idPage) {
-            // 1. On dit à toutes les sections de se cacher
             let pages = document.querySelectorAll('.page');
             pages.forEach(page => page.style.display = 'none');
-            
-            // 2. On affiche uniquement la section qu'on a demandée
             document.getElementById(idPage).style.display = 'block';
-            
-            // Petite option sympa : on remonte en haut de la page quand on change de catégorie
             window.scrollTo(0, 0); 
         }
 
-        // Fonction du panier (inchangée)
         function addToCart(name, price) {
             cart.push({name: name, price: price});
             total += price;
@@ -90,7 +113,6 @@
             tg.MainButton.show();
         }
 
-        // Envoi au bot
         tg.MainButton.onClick(() => {
             tg.sendData(JSON.stringify(cart));
             tg.close();
@@ -98,5 +120,3 @@
     </script>
 </body>
 </html>
-
-
