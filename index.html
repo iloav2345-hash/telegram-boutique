@@ -25,6 +25,44 @@
             color: white; /* On force le texte de base en blanc pour qu'il soit lisible sur le fond */
             margin-bottom: 100px; /* Marge pour le panier */
         }
+
+        /* --- 1. L'ANIMATION DE CHANGEMENT DE PAGE --- */
+        .page { 
+            display: none; 
+            /* On ajoute une animation appelée 'fadeIn' qui dure 0.3 secondes */
+            animation: fadeIn 0.3s ease-in-out; 
+        }
+        #page-categories { display: block; }
+
+        /* On crée l'animation : ça part de transparent/plus bas, et ça monte */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 3. L'EFFET DE CLIC SUR TOUS LES BOUTONS --- */
+        button { 
+            background-color: var(--tg-theme-button-color); 
+            color: var(--tg-theme-button-text-color); 
+            border: none; 
+            padding: 12px; 
+            border-radius: 12px; /* Coins un peu plus ronds */
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 10px; 
+            font-size: 16px; 
+            font-weight: bold;
+            
+            /* On prépare le bouton à être animé */
+            transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        /* QUE SE PASSE-T-IL QUAND ON APPUIE (ACTIVE) SUR LE BOUTON ? */
+        button:active {
+            transform: scale(0.95); /* Le bouton rétrécit de 5% (effet d'enfoncement) */
+            filter: brightness(0.8); /* Il s'assombrit un peu */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* L'ombre diminue */
+        }
         
         /* --- NOUVEAU : STYLE DU TITRE DE LA BOUTIQUE --- */
         .shop-header { text-align: center; margin-bottom: 25px; }
@@ -166,6 +204,7 @@
     </script>
 </body>
 </html>
+
 
 
 
