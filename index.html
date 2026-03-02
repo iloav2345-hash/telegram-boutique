@@ -172,6 +172,12 @@
         <p>Total : <strong><span id="cart-total">0</span>€</strong></p>
         
         <textarea id="client-info" placeholder="📍 Votre adresse de livraison..." style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: sans-serif; resize: none;" rows="2"></textarea>
+        
+        <select id="payment-method" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: sans-serif; background-color: white; color: black;">
+            <option value="Espèces">💵 Paiement en Espèces</option>
+            <option value="Crypto">🪙 Paiement en Crypto</option>
+            <option value="CB">📱 CB</option>
+        </select>
     </div>
 
     <script>
@@ -199,21 +205,21 @@
             tg.MainButton.show();
         }
 
-       // Envoi au bot (Nouveau format)
+        // NOUVEAU : Envoi au bot avec le moyen de paiement
         tg.MainButton.onClick(() => {
-            // On récupère ce que le client a tapé dans la case
             let info = document.getElementById('client-info').value;
+            let payment = document.getElementById('payment-method').value; // On récupère le choix du paiement
             
-            // On crée un "colis" qui contient à la fois les articles ET le texte
             let commandeComplete = {
                 articles: cart,
-                infosClient: info
+                infosClient: info,
+                methodePaiement: payment // On l'ajoute au colis
             };
             
-            // On envoie le colis complet
             tg.sendData(JSON.stringify(commandeComplete));
             tg.close();
         });
     </script>
 </body>
+</html>
 </html>
