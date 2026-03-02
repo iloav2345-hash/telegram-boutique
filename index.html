@@ -30,6 +30,32 @@
         button { background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-size: 16px; font-weight: bold;}
         .btn-retour { background-color: #555; margin-bottom: 20px; } 
         
+        /* --- NOUVEAU : STYLE DES BOUTONS DE CATÉGORIE --- */
+        .btn-category {
+            padding: 16px; /* Boutons un peu plus gros */
+            font-size: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Petite ombre portée stylée */
+            color: white !important; /* Force le texte en blanc pour bien lire sur la couleur */
+            text-transform: uppercase; /* Met le texte en majuscules */
+            letter-spacing: 1px; /* Espace un peu les lettres */
+            border: 2px solid rgba(255,255,255,0.2); /* Petite bordure transparente */
+        }
+        
+        /* Des couleurs différentes pour chaque bouton ! */
+        .btn-cat1 {
+            background: linear-gradient(45deg, #FF512F, #DD2476); /* Dégradé Rouge/Rose */
+        }
+        
+        .btn-cat2 {
+            background: linear-gradient(45deg, #11998e, #38ef7d); /* Dégradé Vert/Menthe */
+        }
+        
+        .btn-cat3 {
+            background: linear-gradient(45deg, #4776E6, #8E54E9); /* Dégradé Bleu/Violet au cas où tu as une 3ème catégorie */
+        }
+        
         /* --- STYLE DU PANIER FIXE EN BAS --- */
         #cart { 
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -52,8 +78,10 @@
 
     <div id="page-categories" class="page">
         <h2 style="color: red; text-align: center;">Que cherchez-vous ?</h2>
-        <button onclick="ouvrirPage('page-produits1')">🍫 Hash</button>
-        <button onclick="ouvrirPage('page-accessoires')">❄️ Zip</button>
+        
+        <button class="btn-category btn-cat1" onclick="ouvrirPage('page-produits1')">📦 Catégorie 1</button>
+        
+        <button class="btn-category btn-cat2" onclick="ouvrirPage('page-accessoires')">🧢 Accessoires</button>
     </div>
 
     <div id="page-produits1" class="page">
@@ -120,5 +148,3 @@
     </script>
 </body>
 </html>
-
-
