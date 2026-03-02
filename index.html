@@ -6,7 +6,25 @@
     <title>Ma Boutique</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); margin-bottom: 100px; }
+       body { 
+            font-family: sans-serif; 
+            padding: 20px; 
+            /* --- NOUVEAU : LE FOND AVEC IMAGE --- */
+            /* 1. On garde une couleur de secours si l'image ne charge pas */
+            background-color: #1a1a1a; 
+            /* 2. REMPLACE 'fond-boutique.jpg' PAR LE NOM EXACT DE TON FICHIER SUR GITHUB */
+            background-image: url('fond-boutique.jpg'); 
+            /* 3. On demande à l'image de couvrir tout l'écran, sans se déformer */
+            background-size: cover; 
+            /* 4. On centre l'image */
+            background-position: center; 
+            /* 5. Optionnel mais sympa : l'image reste fixe quand on scrolle */
+            background-attachment: fixed;
+            
+            /* On enlève l'adaptation automatique au thème de Telegram pour le fond */
+            color: white; /* On force le texte de base en blanc pour qu'il soit lisible sur le fond */
+            margin-bottom: 100px; /* Marge pour le panier */
+        }
         
         /* --- NOUVEAU : STYLE DU TITRE DE LA BOUTIQUE --- */
         .shop-header { text-align: center; margin-bottom: 25px; }
@@ -148,5 +166,6 @@
     </script>
 </body>
 </html>
+
 
 
