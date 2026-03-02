@@ -26,7 +26,7 @@
             margin-bottom: 100px; /* Marge pour le panier */
         }
 
-        /* --- 1. L'ANIMATION DE CHANGEMENT DE PAGE --- */
+                /* --- 1. L'ANIMATION DE CHANGEMENT DE PAGE --- */
         .page { 
             display: none; 
             /* On ajoute une animation appelée 'fadeIn' qui dure 0.3 secondes */
@@ -63,7 +63,7 @@
             filter: brightness(0.8); /* Il s'assombrit un peu */
             box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* L'ombre diminue */
         }
-        
+
         /* --- NOUVEAU : STYLE DU TITRE DE LA BOUTIQUE --- */
         .shop-header { text-align: center; margin-bottom: 25px; }
         .shop-title {
@@ -167,9 +167,11 @@
         </div>
     </div>
 
-    <div id="cart">
+   <div id="cart">
         <h3>Panier (<span id="cart-count">0</span> articles)</h3>
         <p>Total : <strong><span id="cart-total">0</span>€</strong></p>
+        
+        <textarea id="client-info" placeholder="📍 Votre adresse de livraison..." style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: sans-serif; resize: none;" rows="2"></textarea>
     </div>
 
     <script>
@@ -197,15 +199,21 @@
             tg.MainButton.show();
         }
 
+       // Envoi au bot (Nouveau format)
         tg.MainButton.onClick(() => {
-            tg.sendData(JSON.stringify(cart));
+            // On récupère ce que le client a tapé dans la case
+            let info = document.getElementById('client-info').value;
+            
+            // On crée un "colis" qui contient à la fois les articles ET le texte
+            let commandeComplete = {
+                articles: cart,
+                infosClient: info
+            };
+            
+            // On envoie le colis complet
+            tg.sendData(JSON.stringify(commandeComplete));
             tg.close();
         });
     </script>
 </body>
 </html>
-
-
-
-
-
