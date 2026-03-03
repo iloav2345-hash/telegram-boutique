@@ -238,65 +238,101 @@
             addToCart(nom, prix); 
         }
 
-        // NOUVELLE FONCTION : Met à jour tout l'affichage du panier
+        // NOUVELLE FONCTION : Met à jour l'affichage avec les quantités (x2, x3...)
         function afficherPanier() {
             let liste = document.getElementById('cart-items-list');
-            liste.innerHTML = ""; // On vide la liste visuelle pour la recréer proprement
+            liste.innerHTML = ""; 
 
-            // On boucle sur chaque article du panier pour l'afficher
+            let nombreArticles = 0; // On va compter le vrai nombre d'objets
+
             cart.forEach((item, index) => {
+                nombreArticles += item.quantity;
+                let prixLigne = item.price * item.quantity; // Prix total pour cette ligne
+                
                 liste.innerHTML += `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
-                        <span>${item.name} <br> <strong>${item.price}€</strong></span>
+                        <span>${item.name} <strong>(x${item.quantity})</strong> <br> <strong>${prixLigne}€</strong></span>
                         <button onclick="retirerDuPanier(${index})" style="width: auto; padding: 5px 12px; margin: 0; background-color: #ff4d4d; border-radius: 8px;">❌</button>
                     </div>
                 `;
             });
 
-            // On met à jour les compteurs et les prix partout
-            document.getElementById('cart-count-page').innerText = cart.length;
+            // Met à jour tous les compteurs visuels
+            document.getElementById('cart-count-page').innerText = nombreArticles;
             document.getElementById('cart-total-page').innerText = total;
-            document.getElementById('cart-count-float').innerText = cart.length;
+            document.getElementById('cart-count-float').innerText = nombreArticles;
 
-            // On gère l'affichage du gros bouton Telegram
-            if (cart.length > 0 && document.getElementById('page-cart').style.display === 'block') {
+            // Gère le gros bouton Telegram
+            if (nombreArticles > 0 && document.getElementById('page-cart').style.display === 'block') {
                 tg.MainButton.setText(`Valider la commande (${total}€)`);
                 tg.MainButton.show();
             } else {
                 tg.MainButton.hide();
             }
 
-            // On cache la pastille flottante si le panier est totalement vide
-            if (cart.length === 0) {
+            // Cache la pastille si le panier est vide
+            if (nombreArticles === 0) {
                 document.getElementById('cart-float').style.display = 'none';
             }
         }
 
-        // FONCTION MODIFIÉE : Quand on ajoute un article
+        // FONCTION MODIFIÉE : Regroupe les articles identiques
         function addToCart(name, price) {
-            cart.push({name: name, price: price});
-            total += price;
+            // On cherche si ce produit exact est déjà dans le panier
+            let articleExistant = cart.find(item => item.name === name);
+
+            if (articleExistant) {
+                articleExistant.quantity += 1; // S'il y est déjà, on ajoute +1 à la quantité
+            } else {
+                cart.push({name: name, price: price, quantity: 1}); // Sinon, on le crée avec quantité = 1
+            }
             
-            afficherPanier(); // On recalcule l'affichage
+            total += price; // Le prix total global augmente toujours
             
+            afficherPanier(); 
             document.getElementById('cart-float').style.display = 'block';
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // NOUVELLE FONCTION : Quand on clique sur ❌
+        // FONCTION MODIFIÉE : Retire 1 article à la fois
         function retirerDuPanier(index) {
-            // 1. On déduit le prix de l'article du total
-            total -= cart[index].price;
+            let item = cart[index];
             
-            // 2. On supprime l'article du tableau (le 1 signifie "supprimer 1 élément à cette position")
-            cart.splice(index, 1);
+            total -= item.price; // On retire 1x le prix de cet article du total global
+            item.quantity -= 1; // On baisse sa quantité de 1
             
-            // 3. On met à jour l'affichage
+            // Si la quantité tombe à 0, on supprime définitivement la ligne
+            if (item.quantity === 0) {
+                cart.splice(index, 1);
+            }
+            
             afficherPanier();
-            
-            // 4. Petite vibration de confirmation
             tg.HapticFeedback.impactOccurred('medium');
         }
+
+        // FONCTION MODIFIÉE : Envoi au bot (Astuce magique pour ne pas toucher à bot.js)
+        tg.MainButton.onClick(() => {
+            let info = document.getElementById('client-info').value;
+            let payment = document.getElementById('payment-method').value; 
+            
+            // ASTUCE : On "déplie" les quantités pour que ton bot actuel comprenne tout sans bugger !
+            let articlesPourLeBot = [];
+            cart.forEach(item => {
+                for (let i = 0; i < item.quantity; i++) {
+                    articlesPourLeBot.push({name: item.name, price: item.price});
+                }
+            });
+            
+            let commandeComplete = {
+                articles: articlesPourLeBot,
+                infosClient: info,
+                methodePaiement: payment 
+            };
+            
+            tg.sendData(JSON.stringify(commandeComplete));
+            tg.close();
+        });
     </script>
 </body>
 </html>
+
