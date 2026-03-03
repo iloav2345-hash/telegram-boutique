@@ -147,28 +147,6 @@
                 <option value="400" data-nom="Static (50g)">⚖️ 50 grammes - 400€</option>
             </select>
 
-            <div id="page-infos" class="page">
-        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
-        <h2 style="text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">ℹ️ Informations</h2>
-        
-        <div class="product" style="text-align: left; line-height: 1.6;">
-            <h3 style="color: #FF9933; margin-top: 0;">🕒 Horaires & Livraison</h3>
-            <p>Nous sommes disponibles tous les jours de <strong>10h à 22h</strong>.</p>
-            <p>La livraison est rapide, discrète et sécurisée.</p>
-            
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
-            
-            <h3 style="color: #FF9933;">💬 Contact</h3>
-            <p>Une question ou une commande spéciale ? <br>
-            Contactez-nous directement : <strong>@TonPseudoTelegram</strong></p>
-            
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
-            
-            <h3 style="color: #FF9933;">💳 Paiements acceptés</h3>
-            <p>• Espèces à la livraison<br>
-            • Crypto-monnaies (BTC, USDT...)<br>
-            • Carte Bancaire (via lien sécurisé)</p>
-
             <button onclick="ajouterChoixAuPanier('choix-produit-1')">Ajouter au panier</button>
         </div>
     </div>
@@ -207,6 +185,30 @@
         </select>
         
         </div>
+
+        <div id="page-infos" class="page">
+        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
+        <h2 style="text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">ℹ️ Informations</h2>
+        
+        <div class="product" style="text-align: left; line-height: 1.6;">
+            <h3 style="color: #FF9933; margin-top: 0;">🕒 Horaires & Livraison</h3>
+            <p>Nous sommes disponibles tous les jours de <strong>10h à 22h</strong>.</p>
+            <p>La livraison est rapide, discrète et sécurisée.</p>
+            
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+            
+            <h3 style="color: #FF9933;">💬 Contact</h3>
+            <p>Une question ou une commande spéciale ? <br>
+            Contactez-nous directement : <strong>@TonPseudoTelegram</strong></p>
+            
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+            
+            <h3 style="color: #FF9933;">💳 Paiements acceptés</h3>
+            <p>• Espèces à la livraison<br>
+            • Crypto-monnaies (BTC, USDT...)<br>
+            • Carte Bancaire (via lien sécurisé)</p>
+        </div>
+    </div>
 
     <script>
         let tg = window.Telegram.WebApp;
