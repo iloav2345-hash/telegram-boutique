@@ -164,9 +164,12 @@
         <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Continuer mes achats</button>
         <h2 style="text-align: center;">🛒 Mon Panier</h2>
         
-        <div class="product">
-            <p>Vous avez <strong><span id="cart-count-page">0</span> article(s)</strong>.</p>
-            <h3>Total : <span id="cart-total-page">0</span>€</h3>
+        <div class="product" style="text-align: left;">
+            <p style="text-align: center;">Vous avez <strong><span id="cart-count-page">0</span> article(s)</strong>.</p>
+            
+            <div id="cart-items-list" style="margin-bottom: 15px;"></div>
+            
+            <h3 style="text-align: center; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px;">Total : <span id="cart-total-page">0</span>€</h3>
         </div>
 
         <h3 style="margin-top: 20px;">📍 Informations de livraison</h3>
@@ -235,33 +238,65 @@
             addToCart(nom, prix); 
         }
 
+        // NOUVELLE FONCTION : Met à jour tout l'affichage du panier
+        function afficherPanier() {
+            let liste = document.getElementById('cart-items-list');
+            liste.innerHTML = ""; // On vide la liste visuelle pour la recréer proprement
+
+            // On boucle sur chaque article du panier pour l'afficher
+            cart.forEach((item, index) => {
+                liste.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
+                        <span>${item.name} <br> <strong>${item.price}€</strong></span>
+                        <button onclick="retirerDuPanier(${index})" style="width: auto; padding: 5px 12px; margin: 0; background-color: #ff4d4d; border-radius: 8px;">❌</button>
+                    </div>
+                `;
+            });
+
+            // On met à jour les compteurs et les prix partout
+            document.getElementById('cart-count-page').innerText = cart.length;
+            document.getElementById('cart-total-page').innerText = total;
+            document.getElementById('cart-count-float').innerText = cart.length;
+
+            // On gère l'affichage du gros bouton Telegram
+            if (cart.length > 0 && document.getElementById('page-cart').style.display === 'block') {
+                tg.MainButton.setText(`Valider la commande (${total}€)`);
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+
+            // On cache la pastille flottante si le panier est totalement vide
+            if (cart.length === 0) {
+                document.getElementById('cart-float').style.display = 'none';
+            }
+        }
+
+        // FONCTION MODIFIÉE : Quand on ajoute un article
         function addToCart(name, price) {
             cart.push({name: name, price: price});
             total += price;
             
-            // Met à jour le compteur du bouton flottant
-            document.getElementById('cart-count-float').innerText = cart.length;
+            afficherPanier(); // On recalcule l'affichage
             
-            // Fait apparaître le bouton flottant s'il était caché
             document.getElementById('cart-float').style.display = 'block';
-            
-            // Optionnel : petite vibration du téléphone quand on ajoute un article !
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        tg.MainButton.onClick(() => {
-            let info = document.getElementById('client-info').value;
-            let payment = document.getElementById('payment-method').value; 
+        // NOUVELLE FONCTION : Quand on clique sur ❌
+        function retirerDuPanier(index) {
+            // 1. On déduit le prix de l'article du total
+            total -= cart[index].price;
             
-            let commandeComplete = {
-                articles: cart,
-                infosClient: info,
-                methodePaiement: payment 
-            };
+            // 2. On supprime l'article du tableau (le 1 signifie "supprimer 1 élément à cette position")
+            cart.splice(index, 1);
             
-            tg.sendData(JSON.stringify(commandeComplete));
-            tg.close();
-        });
+            // 3. On met à jour l'affichage
+            afficherPanier();
+            
+            // 4. Petite vibration de confirmation
+            tg.HapticFeedback.impactOccurred('medium');
+        }
     </script>
 </body>
 </html>
