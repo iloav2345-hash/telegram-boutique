@@ -137,8 +137,15 @@
         
         <div class="product">
             <img src="https://via.placeholder.com/300x200?text=Photo" alt="Static" class="product-img">
-            <p><strong>Static 10G - 90€</strong></p>
-            <button onclick="addToCart('Static', 90)">Ajouter au panier</button>
+            <p><strong>Static No Farm</strong></p>
+            
+            <select id="choix-produit-1" class="input-field" style="background-color: white; color: black; margin-bottom: 15px;">
+                <option value="45" data-nom="Static (5g)">⚖️ 5 gramme - 45€</option>
+                <option value="80" data-nom="Static (10g)">⚖️ 10 grammes - 80€</option>
+                <option value="400" data-nom="Static (50g)">⚖️ 50 grammes - 400€</option>
+            </select>
+
+            <button onclick="ajouterChoixAuPanier('choix-produit-1')">Ajouter au panier</button>
         </div>
     </div>
 
@@ -215,6 +222,19 @@
             }
         }
 
+        // --- NOUVEAU : Fonction pour lire le choix du poids ---
+        function ajouterChoixAuPanier(idDuSelect) {
+            let menu = document.getElementById(idDuSelect);
+            let optionChoisie = menu.options[menu.selectedIndex];
+            
+            // On récupère le prix et le nom caché dans l'option
+            let prix = parseFloat(optionChoisie.value); 
+            let nom = optionChoisie.getAttribute('data-nom'); 
+            
+            // On envoie ces infos à ton panier existant !
+            addToCart(nom, prix); 
+        }
+
         function addToCart(name, price) {
             cart.push({name: name, price: price});
             total += price;
@@ -245,8 +265,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
