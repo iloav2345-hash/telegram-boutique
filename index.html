@@ -269,10 +269,121 @@
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); 
+        try { tg.expand(); } catch(e) {} // Ne plante pas sur PC
 
         let cart = [];
         let total = 0;
 
         function ouvrirPage(idPage) {
-            document.querySelectorAll('.page').forEach(page =>
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(idPage).classList.add('active');
+
+            try {
+                if(idPage === 'page-cart' && cart.length > 0) {
+                    tg.MainButton.setText(`Valider la commande (${total}€)`);
+                    tg.MainButton.show();
+                } else {
+                    tg.MainButton.hide();
+                }
+            } catch(e) { console.log("Test sur PC : Bouton Telegram ignoré"); }
+        }
+
+        function ajouterChoixAuPanier(idDuSelect) {
+            let menu = document.getElementById(idDuSelect);
+            let optionChoisie = menu.options[menu.selectedIndex];
+            let prix = parseFloat(optionChoisie.value); 
+            let nom = optionChoisie.getAttribute('data-nom'); 
+            addToCart(nom, prix); 
+        }
+
+        function addToCart(name, price) {
+            let articleExistant = cart.find(item => item.name === name);
+            if (articleExistant) {
+                articleExistant.quantity += 1;
+            } else {
+                cart.push({name: name, price: price, quantity: 1});
+            }
+            total += price;
+            afficherPanier(); 
+            document.getElementById('cart-float').style.display = 'flex';
+            
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+        }
+
+        function retirerDuPanier(index) {
+            let item = cart[index];
+            total -= item.price; 
+            item.quantity -= 1; 
+            if (item.quantity === 0) {
+                cart.splice(index, 1);
+            }
+            afficherPanier();
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+        }
+
+        function afficherPanier() {
+            let liste = document.getElementById('cart-items-list');
+            liste.innerHTML = ""; 
+            let nombreArticles = 0;
+
+            cart.forEach((item, index) => {
+                nombreArticles += item.quantity;
+                let prixLigne = item.price * item.quantity;
+                liste.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 14px;">${item.name} <strong style="color:#ff4d4d;">(x${item.quantity})</strong> <br> <strong>${prixLigne}€</strong></span>
+                        <button onclick="retirerDuPanier(${index})" style="background: rgba(255,50,50,0.2); border: 1px solid #ff4d4d; color: white; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer;">❌</button>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cart-total-page').innerText = total;
+            document.getElementById('cart-count-float').innerText = nombreArticles;
+
+            try {
+                if (nombreArticles > 0 && document.getElementById('page-cart').classList.contains('active')) {
+                    tg.MainButton.setText(`Valider la commande (${total}€)`);
+                    tg.MainButton.show();
+                } else {
+                    tg.MainButton.hide();
+                }
+            } catch(e) {}
+
+            if (nombreArticles === 0) {
+                document.getElementById('cart-float').style.display = 'none';
+                if(document.getElementById('page-cart').classList.contains('active')) {
+                    liste.innerHTML = "<p style='text-align:center; color:#aaa;'>Votre panier est vide.</p>";
+                }
+            }
+        }
+
+        try {
+            tg.MainButton.onClick(() => {
+                let info = document.getElementById('client-info').value;
+                let payment = document.getElementById('payment-method').value; 
+                
+                if (info.trim() === "") {
+                    tg.showAlert("Merci de remplir votre adresse de livraison !");
+                    return;
+                }
+
+                let articlesPourLeBot = [];
+                cart.forEach(item => {
+                    for (let i = 0; i < item.quantity; i++) {
+                        articlesPourLeBot.push({name: item.name, price: item.price});
+                    }
+                });
+                
+                let commandeComplete = {
+                    articles: articlesPourLeBot,
+                    infosClient: info,
+                    methodePaiement: payment 
+                };
+                
+                tg.sendData(JSON.stringify(commandeComplete));
+                tg.close();
+            });
+        } catch(e) {}
+    </script>
