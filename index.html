@@ -2,328 +2,317 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapBdv</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boutique Premium</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Germania+One&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { 
-            font-family: "Germania One", system-ui;
-            padding: 20px; 
-            background-color: #1a1a1a; 
-            background-image: url('fond-boutique.png?v=2'); /* Ton image de fond */
-            background-size: cover; 
-            background-position: center; 
+        /* --- LE FOND ET L'AMBIANCE --- */
+        body {
+            /* Pense à mettre le vrai nom de ton image ici ! */
+            background-image: url('ton-fond.jpg?v=4'); 
+            background-color: #0a0a0a; /* Noir profond par défaut */
+            background-size: cover;
+            background-position: top center;
             background-attachment: fixed;
-            color: white; 
-            margin-bottom: 50px; 
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-top: 18vh; /* L'espace en haut pour laisser ton logo visible */
+            padding-bottom: 80px; /* Espace en bas pour le bouton Telegram */
         }
-        
-        .product { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            border-radius: 16px; 
+
+        /* --- L'EFFET VERRE DÉPOLI (GLASSMORPHISM) --- */
+        .glass-card {
+            background: rgba(15, 15, 15, 0.7); /* Fond très sombre et transparent */
+            backdrop-filter: blur(12px); /* Le floutage du fond */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 50, 50, 0.35); /* Contour rouge discret */
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin: 0 auto 25px auto;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
             text-align: center;
-            color: white; 
-        }
-        
-        .product-img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px; max-height: 200px; }
-
-        button { 
-            background-color: var(--tg-theme-button-color); 
-            color: var(--tg-theme-button-text-color); 
-            border: none; 
-            padding: 12px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: 10px; 
-            font-size: 16px; 
-            font-weight: bold;
-            transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease;
         }
 
-        button:active {
-            transform: scale(0.95); 
-            filter: brightness(0.8); 
+        /* --- LES BOUTONS --- */
+        .btn-red-glow {
+            background: linear-gradient(135deg, rgba(220, 20, 36, 0.9), rgba(150, 0, 0, 0.9));
+            color: white;
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            border-radius: 50px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-bottom: 15px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); /* Lueur rouge */
+            transition: all 0.2s ease;
         }
 
-        .btn-retour { background-color: #555; margin-bottom: 20px; } 
+        .btn-red-glow:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
 
-        .btn-category {
-            padding: 16px; 
-            font-size: 18px;
+        .btn-secondary {
+            background: rgba(30, 30, 30, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:active {
+            background: rgba(50, 50, 50, 0.8);
+        }
+
+        /* --- LES TEXTES --- */
+        h2 {
+            color: #ff4d4d;
+            letter-spacing: 2px;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            text-transform: uppercase;
+        }
+
+        /* --- LES PRODUITS --- */
+        .product-img {
+            width: 100%;
             border-radius: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
-            color: white !important; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            border: 2px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .btn-cat1 { background: linear-gradient(45deg, #FF512F, #BD1B00); }
-        .btn-cat2 { background: linear-gradient(45deg, #2AEEF5, #009EA3); }
-        .btn-cat3 { background: linear-gradient(45deg, #30f71e, #00ad42); }
 
-        .page { 
-            display: none; 
-            animation: fadeIn 0.3s ease-in-out; 
+        /* Menus déroulants et champs de texte style Dark Mode */
+        .input-dark {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            width: 90%;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            margin-bottom: 15px;
+            outline: none;
         }
-        #page-categories { display: block; }
+
+        /* --- LE PANIER FLOTTANT --- */
+        #cart-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff4b4b, #cc0000);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.5);
+            cursor: pointer;
+            z-index: 1000;
+            display: none; /* Caché si vide */
+        }
+        #cart-count-float {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: white;
+            color: #cc0000;
+            border-radius: 50%;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Gestion des pages */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* --- NOUVEAU : LE BOUTON PANIER FLOTTANT --- */
-        #cart-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #FF9933, #FF512F);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            cursor: pointer;
-            z-index: 1000;
-            font-weight: bold;
-            display: none; /* Caché au début si le panier est vide */
-            border: 2px solid white;
-        }
-
-        /* Style pour les champs de texte du panier */
-        .input-field {
-            width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 15px;
-            border-radius: 8px; border: none; box-sizing: border-box; 
-            font-family: sans-serif; font-size: 15px;
-        }
     </style>
 </head>
 <body>
 
-    <div id="cart-float" onclick="ouvrirPage('page-cart')">
-        🛒 Panier (<span id="cart-count-float">0</span>)
+    <div id="page-categories" class="page active">
+        <div class="glass-card">
+            <h2>Que cherchez-vous ?</h2>
+
+            <button class="btn-red-glow" onclick="ouvrirPage('page-produits1')">
+                🔥 Menu Produits
+            </button>
+            
+            <button class="btn-secondary" onclick="ouvrirPage('page-infos')">
+                ℹ️ Informations
+            </button>
+        </div>
     </div>
 
-    <div id="page-categories" class="page">
-        <h2 style="margin-top: 22vh; color: rgb(214, 1, 1); text-align: center; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">Que cherchez-vous ?</h2>
-        <button class="btn-category btn-cat1" onclick="ouvrirPage('page-produits1')">🍫 Hash</button>
-        <button class="btn-category btn-cat2" onclick="ouvrirPage('page-accessoires')">❄️ Zip</button>
-        <button class="btn-category btn-cat3" onclick="ouvrirPage('page-infos')">ℹ️ Informations</button>
-    </div>
 
     <div id="page-produits1" class="page">
-        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
-        <h2 style="text-align: center;">🍫 Hash</h2>
-        
-        <div class="product">
-            <img src="5852728140600380832.jpg" alt="Static" class="product-img">
-            <p><strong>Static No Farm - 8-5€ le g</strong></p>
+        <div class="glass-card" style="padding: 15px;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
             
-            <select id="choix-produit-1" class="input-field" style="background-color: white; color: black; margin-bottom: 15px;">
-                <option value="80" data-nom="Static (10g)">⚖️ 10 gramme - 80€</option>
-                <option value="180" data-nom="Static (30g)">⚖️ 30 grammes - 180€</option>
-                <option value="250" data-nom="Static (50g)">⚖️ 50 grammes - 250€</option>
-            </select>
+            <h2 style="color: white;">🔥 Nos Produits</h2>
 
-            <button onclick="ajouterChoixAuPanier('choix-produit-1')">Ajouter au panier</button>
+            <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+1" alt="Produit 1" class="product-img">
+                <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Premium G</p>
+                
+                <select id="choix-produit-1" class="input-dark">
+                    <option value="10" data-nom="Premium G (1g)">⚖️ 1 gramme - 10€</option>
+                    <option value="45" data-nom="Premium G (5g)">⚖️ 5 grammes - 45€</option>
+                    <option value="80" data-nom="Premium G (10g)">⚖️ 10 grammes - 80€</option>
+                </select>
+
+                <button class="btn-red-glow" style="padding: 10px; font-size: 14px;" onclick="ajouterChoixAuPanier('choix-produit-1')">Ajouter au panier</button>
+            </div>
+
+            <div>
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+2" alt="Produit 2" class="product-img">
+                <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Filtre X</p>
+                
+                <select id="choix-produit-2" class="input-dark">
+                    <option value="20" data-nom="Filtre X (2g)">⚖️ 2 grammes - 20€</option>
+                    <option value="50" data-nom="Filtre X (5g)">⚖️ 5 grammes - 50€</option>
+                </select>
+
+                <button class="btn-red-glow" style="padding: 10px; font-size: 14px;" onclick="ajouterChoixAuPanier('choix-produit-2')">Ajouter au panier</button>
+            </div>
+
         </div>
     </div>
 
-    <div id="page-accessoires" class="page">
-        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
-        <h2 style="text-align: center;">❄️ Zip</h2>
-        
-        <div class="product">
-            <img src="machine.png" alt="Zipette" class="product-img">
-            <p><strong>Zipette - 50-45€ le g</strong></p>
 
-            <select id="choix-produit-2" class="input-field" style="background-color: white; color: black; margin-bottom: 15px;">
-                <option value="50" data-nom="Zipette (1g)">⚖️ 1 gramme - 50€</option>
-                <option value="225" data-nom="Zipette (5g)">⚖️ 5 grammes - 225€</option>
-                <option value="400" data-nom="Zipette (10g)">⚖️ 10 grammes - 400€</option>
-            </select>
-
-            <button onclick="ajouterChoixAuPanier('choix-produit-2')">Ajouter au panier</button>
+    <div id="page-infos" class="page">
+        <div class="glass-card" style="text-align: left;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
+            
+            <h2 style="text-align: center;">ℹ️ Informations</h2>
+            
+            <p style="color: #ff4d4d; font-weight: bold; margin-bottom: 5px;">🕒 Horaires</p>
+            <p style="font-size: 14px; color: #ccc;">Ouvert tous les jours de 10h à 22h.</p>
+            
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+            
+            <p style="color: #ff4d4d; font-weight: bold; margin-bottom: 5px;">💳 Paiement</p>
+            <p style="font-size: 14px; color: #ccc;">Espèces à la livraison ou Crypto.</p>
         </div>
     </div>
+
 
     <div id="page-cart" class="page">
-        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Continuer mes achats</button>
-        <h2 style="text-align: center;">🛒 Mon Panier</h2>
-        
-        <div class="product" style="text-align: left;">
-            <p style="text-align: center;">Vous avez <strong><span id="cart-count-page">0</span> article(s)</strong>.</p>
+        <div class="glass-card">
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Retour Boutique</button>
             
-            <div id="cart-items-list" style="margin-bottom: 15px;"></div>
+            <h2>🛒 Mon Panier</h2>
             
-            <h3 style="text-align: center; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px;">Total : <span id="cart-total-page">0</span>€</h3>
-        </div>
+            <div id="cart-items-list" style="margin-bottom: 20px; text-align: left;"></div>
+            
+            <h3 style="border-top: 1px solid rgba(255,50,50,0.3); padding-top: 15px; color: white;">Total : <span id="cart-total-page" style="color: #ff4d4d;">0</span>€</h3>
 
-        <h3 style="margin-top: 20px;">📍 Informations de livraison</h3>
-        <textarea id="client-info" class="input-field" placeholder="Votre adresse..." rows="2"></textarea>
-        
-        <h3 style="margin-top: 10px;">💳 Moyen de paiement</h3>
-        <select id="payment-method" class="input-field">
-            <option value="Espèces">💵 Espèces à la livraison</option>
-            <option value="Crypto">🪙 Crypto-monnaie</option>
-            <option value="Carte Bancaire">💳 Carte Bancaire (Site externe)</option>
-        </select>
-        
-        </div>
-
-        <div id="page-infos" class="page">
-        <button class="btn-retour" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
-        <h2 style="text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">ℹ️ Informations</h2>
-        
-        <div class="product" style="text-align: left; line-height: 1.6;">
-            <h3 style="color: #FF9933; margin-top: 0;">🕒 Horaires & Livraison</h3>
-            <p>Nous sommes disponibles tous les jours de <strong>??h à ??h</strong>.</p>
-            <p>La livraison est rapide, discrète et sécurisée.</p>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
             
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+            <p style="text-align: left; margin-bottom: 5px; font-size: 14px; color: #aaa;">📍 Informations de livraison :</p>
+            <textarea id="client-info" class="input-dark" rows="3" placeholder="Adresse complète, code porte, ville..."></textarea>
             
-            <h3 style="color: #FF9933;">💬 Contact</h3>
-            <p>Une question ou une commande spéciale ? <br>
-            Contactez-nous directement : <strong>@bet_prono00 ou @souPoudreuz</strong></p>
-            <p>Nous contactez pour les commandes de moins de <strong>10G</strong> !</p>
-            
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
-            
-            <h3 style="color: #FF9933;">💳 Paiements acceptés</h3>
-            <p>• Espèces à la livraison<br>
-            • Crypto-monnaies (BTC, USDT...)<br>
-            • Carte Bancaire (via lien sécurisé)</p>
+            <p style="text-align: left; margin-bottom: 5px; font-size: 14px; color: #aaa;">💳 Moyen de paiement :</p>
+            <select id="payment-method" class="input-dark">
+                <option value="Espèces">Espèces à la livraison</option>
+                <option value="Crypto">Crypto (BTC / USDT)</option>
+            </select>
         </div>
     </div>
+
+
+    <div id="cart-float" onclick="ouvrirPage('page-cart')">
+        🛒<span id="cart-count-float">0</span>
+    </div>
+
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); 
+        tg.expand(); // Ouvre l'app en grand
 
         let cart = [];
         let total = 0;
 
+        // Fonction pour changer de page
         function ouvrirPage(idPage) {
-            // Cache toutes les pages
-            let pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.style.display = 'none');
-            
-            // Affiche la page demandée
-            document.getElementById(idPage).style.display = 'block';
-            window.scrollTo(0, 0); 
-
-            // LOGIQUE DU PANIER ET DU BOUTON TELEGRAM
-            if (idPage === 'page-cart') {
-                // On est sur la page Panier : on cache le petit bouton flottant
-                document.getElementById('cart-float').style.display = 'none';
-                
-                // Met à jour les textes de la page panier
-                document.getElementById('cart-count-page').innerText = cart.length;
-                document.getElementById('cart-total-page').innerText = total;
-
-                // On affiche le gros bouton Telegram de validation (uniquement s'il y a des articles)
-                if (cart.length > 0) {
-                    tg.MainButton.setText(`Valider la commande (${total}€)`);
-                    tg.MainButton.show();
-                }
-            } else {
-                // On n'est PAS sur la page panier : on cache le gros bouton Telegram
-                tg.MainButton.hide();
-                
-                // On réaffiche la petite pastille flottante (uniquement s'il y a des articles)
-                if (cart.length > 0) {
-                    document.getElementById('cart-float').style.display = 'block';
-                }
-            }
-        }
-
-        // --- NOUVEAU : Fonction pour lire le choix du poids ---
-        function ajouterChoixAuPanier(idDuSelect) {
-            let menu = document.getElementById(idDuSelect);
-            let optionChoisie = menu.options[menu.selectedIndex];
-            
-            // On récupère le prix et le nom caché dans l'option
-            let prix = parseFloat(optionChoisie.value); 
-            let nom = optionChoisie.getAttribute('data-nom'); 
-            
-            // On envoie ces infos à ton panier existant !
-            addToCart(nom, prix); 
-        }
-
-        // NOUVELLE FONCTION : Met à jour l'affichage avec les quantités (x2, x3...)
-        function afficherPanier() {
-            let liste = document.getElementById('cart-items-list');
-            liste.innerHTML = ""; 
-
-            let nombreArticles = 0; // On va compter le vrai nombre d'objets
-
-            cart.forEach((item, index) => {
-                nombreArticles += item.quantity;
-                let prixLigne = item.price * item.quantity; // Prix total pour cette ligne
-                
-                liste.innerHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
-                        <span>${item.name} <strong>(x${item.quantity})</strong> <br> <strong>${prixLigne}€</strong></span>
-                        <button onclick="retirerDuPanier(${index})" style="width: auto; padding: 5px 12px; margin: 0; background-color: #ff4d4d; border-radius: 8px;">❌</button>
-                    </div>
-                `;
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
+            document.getElementById(idPage).classList.add('active');
 
-            // Met à jour tous les compteurs visuels
-            document.getElementById('cart-count-page').innerText = nombreArticles;
-            document.getElementById('cart-total-page').innerText = total;
-            document.getElementById('cart-count-float').innerText = nombreArticles;
-
-            // Gère le gros bouton Telegram
-            if (nombreArticles > 0 && document.getElementById('page-cart').style.display === 'block') {
+            // Afficher le bouton Telegram uniquement sur le panier
+            if(idPage === 'page-cart' && cart.length > 0) {
                 tg.MainButton.setText(`Valider la commande (${total}€)`);
                 tg.MainButton.show();
             } else {
                 tg.MainButton.hide();
             }
-
-            // Cache la pastille si le panier est vide
-            if (nombreArticles === 0) {
-                document.getElementById('cart-float').style.display = 'none';
-            }
         }
 
-        // FONCTION MODIFIÉE : Regroupe les articles identiques
+        // Fonction pour lire le menu déroulant (Poids/Prix)
+        function ajouterChoixAuPanier(idDuSelect) {
+            let menu = document.getElementById(idDuSelect);
+            let optionChoisie = menu.options[menu.selectedIndex];
+            
+            let prix = parseFloat(optionChoisie.value); 
+            let nom = optionChoisie.getAttribute('data-nom'); 
+            
+            addToCart(nom, prix); 
+        }
+
+        // Fonction pour ajouter au panier en groupant les quantités
         function addToCart(name, price) {
-            // On cherche si ce produit exact est déjà dans le panier
             let articleExistant = cart.find(item => item.name === name);
 
             if (articleExistant) {
-                articleExistant.quantity += 1; // S'il y est déjà, on ajoute +1 à la quantité
+                articleExistant.quantity += 1;
             } else {
-                cart.push({name: name, price: price, quantity: 1}); // Sinon, on le crée avec quantité = 1
+                cart.push({name: name, price: price, quantity: 1});
             }
             
-            total += price; // Le prix total global augmente toujours
-            
+            total += price;
             afficherPanier(); 
-            document.getElementById('cart-float').style.display = 'block';
-            tg.HapticFeedback.impactOccurred('light');
+            
+            document.getElementById('cart-float').style.display = 'flex';
+            tg.HapticFeedback.impactOccurred('light'); // Vibration
         }
 
-        // FONCTION MODIFIÉE : Retire 1 article à la fois
+        // Fonction pour retirer un article du panier
         function retirerDuPanier(index) {
             let item = cart[index];
             
-            total -= item.price; // On retire 1x le prix de cet article du total global
-            item.quantity -= 1; // On baisse sa quantité de 1
+            total -= item.price; 
+            item.quantity -= 1; 
             
-            // Si la quantité tombe à 0, on supprime définitivement la ligne
             if (item.quantity === 0) {
                 cart.splice(index, 1);
             }
@@ -332,12 +321,54 @@
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        // FONCTION MODIFIÉE : Envoi au bot (Astuce magique pour ne pas toucher à bot.js)
+        // Fonction pour mettre à jour l'affichage
+        function afficherPanier() {
+            let liste = document.getElementById('cart-items-list');
+            liste.innerHTML = ""; 
+
+            let nombreArticles = 0;
+
+            cart.forEach((item, index) => {
+                nombreArticles += item.quantity;
+                let prixLigne = item.price * item.quantity;
+                
+                liste.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 14px;">${item.name} <strong style="color:#ff4d4d;">(x${item.quantity})</strong> <br> <strong>${prixLigne}€</strong></span>
+                        <button onclick="retirerDuPanier(${index})" style="background: rgba(255,50,50,0.2); border: 1px solid #ff4d4d; color: white; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer;">❌</button>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cart-total-page').innerText = total;
+            document.getElementById('cart-count-float').innerText = nombreArticles;
+
+            if (nombreArticles > 0 && document.getElementById('page-cart').classList.contains('active')) {
+                tg.MainButton.setText(`Valider la commande (${total}€)`);
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+
+            if (nombreArticles === 0) {
+                document.getElementById('cart-float').style.display = 'none';
+                if(document.getElementById('page-cart').classList.contains('active')) {
+                    liste.innerHTML = "<p style='text-align:center; color:#aaa;'>Votre panier est vide.</p>";
+                }
+            }
+        }
+
+        // Envoi de la commande à ton Bot Node.js
         tg.MainButton.onClick(() => {
             let info = document.getElementById('client-info').value;
             let payment = document.getElementById('payment-method').value; 
             
-            // ASTUCE : On "déplie" les quantités pour que ton bot actuel comprenne tout sans bugger !
+            if (info.trim() === "") {
+                tg.showAlert("Merci de remplir votre adresse de livraison !");
+                return;
+            }
+
+            // On "déplie" le panier pour que le bot reçoive bien toutes les lignes
             let articlesPourLeBot = [];
             cart.forEach(item => {
                 for (let i = 0; i < item.quantity; i++) {
