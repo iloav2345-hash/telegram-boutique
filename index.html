@@ -11,11 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- LE FOND ET L'AMBIANCE --- */
+        /* --- LE FOND --- */
         body {
-            /* Pense à mettre le vrai nom de ton image ici ! */
+            /* N'OUBLIE PAS DE METTRE LE VRAI NOM DE TON IMAGE ICI */
             background-image: url('fond-boutique.png?v=2'); 
-            background-color: #0a0a0a; /* Noir profond par défaut */
+            background-color: #0a0a0a; 
             background-size: cover;
             background-position: top center;
             background-attachment: fixed;
@@ -23,16 +23,16 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            padding-top: 30vh; /* L'espace en haut pour laisser ton logo visible */
-            padding-bottom: 80px; /* Espace en bas pour le bouton Telegram */
+            padding-top: 30vh; 
+            padding-bottom: 80px; 
         }
 
-        /* --- L'EFFET VERRE DÉPOLI (GLASSMORPHISM) --- */
+        /* --- VERRE DÉPOLI --- */
         .glass-card {
-            background: rgba(15, 15, 15, 0.7); /* Fond très sombre et transparent */
-            backdrop-filter: blur(12px); /* Le floutage du fond */
+            background: rgba(15, 15, 15, 0.7); 
+            backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 50, 50, 0.35); /* Contour rouge discret */
+            border: 1px solid rgba(255, 50, 50, 0.35); 
             border-radius: 20px;
             padding: 25px 20px;
             margin: 0 auto 25px auto;
@@ -42,7 +42,7 @@
             text-align: center;
         }
 
-        /* --- LES BOUTONS --- */
+        /* --- BOUTONS --- */
         .btn-red-glow {
             background: linear-gradient(135deg, rgba(220, 20, 36, 0.9), rgba(150, 0, 0, 0.9));
             color: white;
@@ -56,7 +56,7 @@
             width: 100%;
             margin-bottom: 15px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); /* Lueur rouge */
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); 
             transition: all 0.2s ease;
         }
 
@@ -79,11 +79,7 @@
             transition: all 0.2s ease;
         }
 
-        .btn-secondary:active {
-            background: rgba(50, 50, 50, 0.8);
-        }
-
-        /* --- LES TEXTES --- */
+        /* --- TEXTES --- */
         h2 {
             color: #ff4d4d;
             letter-spacing: 2px;
@@ -94,7 +90,7 @@
             text-transform: uppercase;
         }
 
-        /* --- LES PRODUITS --- */
+        /* --- PRODUITS --- */
         .product-img {
             width: 100%;
             border-radius: 12px;
@@ -102,7 +98,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* Menus déroulants et champs de texte style Dark Mode */
         .input-dark {
             background: rgba(0, 0, 0, 0.6);
             color: white;
@@ -116,7 +111,7 @@
             outline: none;
         }
 
-        /* --- LE PANIER FLOTTANT --- */
+        /* --- PANIER FLOTTANT --- */
         #cart-float {
             position: fixed;
             bottom: 20px;
@@ -133,7 +128,7 @@
             box-shadow: 0 4px 15px rgba(204, 0, 0, 0.5);
             cursor: pointer;
             z-index: 1000;
-            display: none; /* Caché si vide */
+            display: none; 
         }
         #cart-count-float {
             position: absolute;
@@ -147,7 +142,7 @@
             font-weight: bold;
         }
 
-        /* Gestion des pages */
+        /* --- GESTION DES PAGES --- */
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.3s ease; }
 
@@ -164,10 +159,16 @@
             <h2>Que cherchez-vous ?</h2>
 
             <button class="btn-red-glow" onclick="ouvrirPage('page-sous-categories')">
-                🔥 MENU PRODUITS
+                🔥 Menu Produits
             </button>
+            
+            <button class="btn-secondary" onclick="ouvrirPage('page-infos')">
+                ℹ️ Informations
+            </button>
+        </div>
+    </div>
 
-            <div id="page-sous-categories" class="page">
+    <div id="page-sous-categories" class="page">
         <div class="glass-card">
             <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Accueil</button>
             
@@ -180,22 +181,17 @@
             <button class="btn-red-glow" onclick="ouvrirPage('page-categorie-2')">
                 🍫 Catégorie 2
             </button>
-            
-            <button class="btn-secondary" onclick="ouvrirPage('page-infos')">
-                ℹ️ Informations
-            </button>
         </div>
     </div>
 
-
-   <div id="page-categorie-1" class="page">
+    <div id="page-categorie-1" class="page">
         <div class="glass-card" style="padding: 15px;">
             <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-sous-categories')">⬅️ Retour</button>
             
             <h2 style="color: white;">🌿 Catégorie 1</h2>
 
             <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
-                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit" alt="Produit 1" class="product-img">
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+1" alt="Produit 1" class="product-img">
                 <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Premium G</p>
                 
                 <select id="choix-produit-1" class="input-dark">
@@ -215,7 +211,7 @@
             <h2 style="color: white;">🍫 Catégorie 2</h2>
 
             <div>
-                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit" alt="Produit 2" class="product-img">
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+2" alt="Produit 2" class="product-img">
                 <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Filtre X</p>
                 
                 <select id="choix-produit-2" class="input-dark">
@@ -227,7 +223,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="page-infos" class="page">
         <div class="glass-card" style="text-align: left;">
@@ -245,10 +240,9 @@
         </div>
     </div>
 
-
     <div id="page-cart" class="page">
         <div class="glass-card">
-            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Retour Boutique</button>
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Continuer mes achats</button>
             
             <h2>🛒 Mon Panier</h2>
             
@@ -269,142 +263,16 @@
         </div>
     </div>
 
-
     <div id="cart-float" onclick="ouvrirPage('page-cart')">
         🛒<span id="cart-count-float">0</span>
     </div>
 
-
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Ouvre l'app en grand
+        tg.expand(); 
 
         let cart = [];
         let total = 0;
 
-        // Fonction pour changer de page
         function ouvrirPage(idPage) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById(idPage).classList.add('active');
-
-            // Afficher le bouton Telegram uniquement sur le panier
-            if(idPage === 'page-cart' && cart.length > 0) {
-                tg.MainButton.setText(`Valider la commande (${total}€)`);
-                tg.MainButton.show();
-            } else {
-                tg.MainButton.hide();
-            }
-        }
-
-        // Fonction pour lire le menu déroulant (Poids/Prix)
-        function ajouterChoixAuPanier(idDuSelect) {
-            let menu = document.getElementById(idDuSelect);
-            let optionChoisie = menu.options[menu.selectedIndex];
-            
-            let prix = parseFloat(optionChoisie.value); 
-            let nom = optionChoisie.getAttribute('data-nom'); 
-            
-            addToCart(nom, prix); 
-        }
-
-        // Fonction pour ajouter au panier en groupant les quantités
-        function addToCart(name, price) {
-            let articleExistant = cart.find(item => item.name === name);
-
-            if (articleExistant) {
-                articleExistant.quantity += 1;
-            } else {
-                cart.push({name: name, price: price, quantity: 1});
-            }
-            
-            total += price;
-            afficherPanier(); 
-            
-            document.getElementById('cart-float').style.display = 'flex';
-            tg.HapticFeedback.impactOccurred('light'); // Vibration
-        }
-
-        // Fonction pour retirer un article du panier
-        function retirerDuPanier(index) {
-            let item = cart[index];
-            
-            total -= item.price; 
-            item.quantity -= 1; 
-            
-            if (item.quantity === 0) {
-                cart.splice(index, 1);
-            }
-            
-            afficherPanier();
-            tg.HapticFeedback.impactOccurred('medium');
-        }
-
-        // Fonction pour mettre à jour l'affichage
-        function afficherPanier() {
-            let liste = document.getElementById('cart-items-list');
-            liste.innerHTML = ""; 
-
-            let nombreArticles = 0;
-
-            cart.forEach((item, index) => {
-                nombreArticles += item.quantity;
-                let prixLigne = item.price * item.quantity;
-                
-                liste.innerHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                        <span style="font-size: 14px;">${item.name} <strong style="color:#ff4d4d;">(x${item.quantity})</strong> <br> <strong>${prixLigne}€</strong></span>
-                        <button onclick="retirerDuPanier(${index})" style="background: rgba(255,50,50,0.2); border: 1px solid #ff4d4d; color: white; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer;">❌</button>
-                    </div>
-                `;
-            });
-
-            document.getElementById('cart-total-page').innerText = total;
-            document.getElementById('cart-count-float').innerText = nombreArticles;
-
-            if (nombreArticles > 0 && document.getElementById('page-cart').classList.contains('active')) {
-                tg.MainButton.setText(`Valider la commande (${total}€)`);
-                tg.MainButton.show();
-            } else {
-                tg.MainButton.hide();
-            }
-
-            if (nombreArticles === 0) {
-                document.getElementById('cart-float').style.display = 'none';
-                if(document.getElementById('page-cart').classList.contains('active')) {
-                    liste.innerHTML = "<p style='text-align:center; color:#aaa;'>Votre panier est vide.</p>";
-                }
-            }
-        }
-
-        // Envoi de la commande à ton Bot Node.js
-        tg.MainButton.onClick(() => {
-            let info = document.getElementById('client-info').value;
-            let payment = document.getElementById('payment-method').value; 
-            
-            if (info.trim() === "") {
-                tg.showAlert("Merci de remplir votre adresse de livraison !");
-                return;
-            }
-
-            // On "déplie" le panier pour que le bot reçoive bien toutes les lignes
-            let articlesPourLeBot = [];
-            cart.forEach(item => {
-                for (let i = 0; i < item.quantity; i++) {
-                    articlesPourLeBot.push({name: item.name, price: item.price});
-                }
-            });
-            
-            let commandeComplete = {
-                articles: articlesPourLeBot,
-                infosClient: info,
-                methodePaiement: payment 
-            };
-            
-            tg.sendData(JSON.stringify(commandeComplete));
-            tg.close();
-        });
-    </script>
-</body>
-</html>
+            document.querySelectorAll('.page').forEach(page =>
