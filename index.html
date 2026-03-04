@@ -163,8 +163,22 @@
         <div class="glass-card">
             <h2>Que cherchez-vous ?</h2>
 
-            <button class="btn-red-glow" onclick="ouvrirPage('page-produits1')">
-                🔥 Menu Produits
+            <button class="btn-red-glow" onclick="ouvrirPage('page-sous-categories')">
+                🔥 MENU PRODUITS
+            </button>
+
+            <div id="page-sous-categories" class="page">
+        <div class="glass-card">
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Accueil</button>
+            
+            <h2>NOS CATÉGORIES</h2>
+
+            <button class="btn-red-glow" onclick="ouvrirPage('page-categorie-1')">
+                🌿 Catégorie 1
+            </button>
+            
+            <button class="btn-red-glow" onclick="ouvrirPage('page-categorie-2')">
+                🍫 Catégorie 2
             </button>
             
             <button class="btn-secondary" onclick="ouvrirPage('page-infos')">
@@ -174,27 +188,34 @@
     </div>
 
 
-    <div id="page-produits1" class="page">
+   <div id="page-categorie-1" class="page">
         <div class="glass-card" style="padding: 15px;">
-            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-categories')">⬅️ Retour</button>
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-sous-categories')">⬅️ Retour</button>
             
-            <h2 style="color: white;">🔥 Nos Produits</h2>
+            <h2 style="color: white;">🌿 Catégorie 1</h2>
 
             <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
-                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+1" alt="Produit 1" class="product-img">
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit" alt="Produit 1" class="product-img">
                 <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Premium G</p>
                 
                 <select id="choix-produit-1" class="input-dark">
                     <option value="10" data-nom="Premium G (1g)">⚖️ 1 gramme - 10€</option>
                     <option value="45" data-nom="Premium G (5g)">⚖️ 5 grammes - 45€</option>
-                    <option value="80" data-nom="Premium G (10g)">⚖️ 10 grammes - 80€</option>
                 </select>
 
                 <button class="btn-red-glow" style="padding: 10px; font-size: 14px;" onclick="ajouterChoixAuPanier('choix-produit-1')">Ajouter au panier</button>
             </div>
+        </div>
+    </div>
+
+    <div id="page-categorie-2" class="page">
+        <div class="glass-card" style="padding: 15px;">
+            <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin-bottom: 20px;" onclick="ouvrirPage('page-sous-categories')">⬅️ Retour</button>
+            
+            <h2 style="color: white;">🍫 Catégorie 2</h2>
 
             <div>
-                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit+2" alt="Produit 2" class="product-img">
+                <img src="https://via.placeholder.com/300x200/222222/ff4d4d?text=Photo+Produit" alt="Produit 2" class="product-img">
                 <p style="font-weight: 600; font-size: 18px; margin: 5px 0;">Filtre X</p>
                 
                 <select id="choix-produit-2" class="input-dark">
@@ -204,7 +225,6 @@
 
                 <button class="btn-red-glow" style="padding: 10px; font-size: 14px;" onclick="ajouterChoixAuPanier('choix-produit-2')">Ajouter au panier</button>
             </div>
-
         </div>
     </div>
 
@@ -388,6 +408,3 @@
     </script>
 </body>
 </html>
-
-
-
