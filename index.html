@@ -155,6 +155,19 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- VERSION DE L'APP --- */
+        .app-version {
+            position: fixed;
+            bottom: 8px;
+            right: 15px;
+            color: rgba(255, 255, 255, 0.3); /* Blanc très transparent et discret */
+            font-size: 11px;
+            letter-spacing: 1px;
+            z-index: 10; /* Reste en dessous du bouton panier qui est à 1000 */
+            pointer-events: none; /* Magique : permet de cliquer "à travers" si on touche par erreur */
+        }
+
     </style>
 </head>
 <body>
@@ -273,6 +286,8 @@
     <div id="cart-float" onclick="ouvrirPage('page-cart')">
         🛒<span id="cart-count-float">0</span>
     </div>
+
+    <div class="app-version">v1.0</div>
 
     <script>
         let tg = window.Telegram.WebApp;
