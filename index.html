@@ -6,11 +6,16 @@
     <title>Boutique Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
+
+        /* --- IMPORTATION DE TA POLICE PERSONNALISÉE --- */
+        @font-face {
+            font-family: 'MaPolicePremium';
+            src: url('pricedown.otf') format('opentype'); /* Mets le VRAI nom de ton fichier ici */
+            font-weight: normal;
+            font-style: normal;
+        }
+
         /* --- LE FOND --- */
         body {
             /* N'OUBLIE PAS DE METTRE LE VRAI NOM DE TON IMAGE ICI */
@@ -20,7 +25,7 @@
             background-position: top center;
             background-attachment: fixed;
             color: #ffffff;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'MaPolicePremium', sans-serif;
             margin: 0;
             padding: 0;
             padding-top: 30vh; 
