@@ -84,11 +84,22 @@
         🛒 Panier (<span id="cart-count-float">0</span>)
     </div>
 
-    <div id="page-categories" class="page">
-        <h2 style="margin-top: 22vh; color: rgb(214, 1, 1); text-align: center; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">Que cherchez-vous ?</h2>
-        <button class="btn-category btn-cat1" onclick="ouvrirPage('page-produits1')">🍫 Hash</button>
-        <button class="btn-category btn-cat2" onclick="ouvrirPage('page-accessoires')">❄️ Zip</button>
-        <button class="btn-category btn-cat3" onclick="ouvrirPage('page-infos')">ℹ️ Informations</button>
+    <div id="page-categories" class="page active">
+        
+        <div class="glass-card">
+            <h2 style="color: #ff4d4d; letter-spacing: 2px; font-size: 22px; margin-bottom: 25px;">
+                QUE CHERCHEZ-VOUS ?
+            </h2>
+
+            <button class="btn-red-glow" onclick="ouvrirPage('page-produits1')">
+                🔥 MENU PRODUITS
+            </button>
+            
+            <button class="btn-red-glow" style="background: rgba(30,30,30,0.8); box-shadow: none; border-color: rgba(255,255,255,0.2);" onclick="ouvrirPage('page-infos')">
+                ℹ️ INFORMATIONS
+            </button>
+        </div>
+
     </div>
 
     <div id="page-produits1" class="page">
