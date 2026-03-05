@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 // --- 1. TES INFORMATIONS (À REMPLIR) ---
 const token = '8707103708:AAGz9OKli5HybsGLiSsANeSN3jmRaRWEHrM'; // Le token donné par BotFather
-const monIdAdmin = '932946637'; // Ton ID Telegram (donné par userinfobot)
+const token = process.env.TELEGRAM_TOKEN;
 const webAppUrl = 'https://iloav2345-hash.github.io/telegram-boutique/'; // Le lien de ta page GitHub
 
 // Création du bot
@@ -101,5 +101,6 @@ bot.on('message', async (msg) => {
         }
     }
 });
+
 
 console.log("✅ Le bot est lancé en local sur ton PC !");
