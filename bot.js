@@ -22,7 +22,7 @@ server.listen(port, '0.0.0.0', () => {
 const token = process.env.TELEGRAM_TOKEN;
 
 // ⚠️ METS L'ID DE TON GROUPE ICI (N'oublie pas le tiret -)
-const idGroupeLivreurs = '-5160816980'; 
+const idGroupeLivreurs = '-1003875486875'; 
 
 const webAppUrl = 'https://iloav2345-hash.github.io/telegram-boutique/'; 
 
