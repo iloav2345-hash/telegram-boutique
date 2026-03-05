@@ -12,7 +12,6 @@ const server = http.createServer((req, res) => {
     res.end('Bot en ligne et fonctionnel !');
 });
 
-// Le "0.0.0.0" permet à Render de voir que le port est ouvert
 server.listen(port, '0.0.0.0', () => {
     console.log(`Serveur web allumé sur le port ${port}`);
 });
@@ -22,14 +21,12 @@ server.listen(port, '0.0.0.0', () => {
 // ==========================================
 const token = process.env.TELEGRAM_TOKEN;
 
-// ⚠️ REMPLIS TON ID DE GROUPE ICI (N'oublie pas le tiret -)
+// ⚠️ METS L'ID DE TON GROUPE ICI (N'oublie pas le tiret -)
 const idGroupeLivreurs = '-5160816980'; 
 
 const webAppUrl = 'https://iloav2345-hash.github.io/telegram-boutique/'; 
 
-// Création du bot
 const bot = new TelegramBot(token, {polling: true});
-
 
 // ==========================================
 // --- 2. COMMANDE /START ---
@@ -56,7 +53,6 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
-
 // ==========================================
 // --- 3. RÉCEPTION DE LA COMMANDE ---
 // ==========================================
@@ -79,8 +75,6 @@ bot.on('message', async (msg) => {
             });
 
             let texteInfo = infosClient ? infosClient : "Non renseignée";
-
-            // --- INSTRUCTIONS DE PAIEMENT SUR MESURE ---
             let instructionsPaiement = "";
 
             if (methodePaiement === "Crypto") {
@@ -88,7 +82,6 @@ bot.on('message', async (msg) => {
                                        "Veuillez envoyer le montant exact (USDT/BTC) à cette adresse :\n" +
                                        "`Bientot`\n\n" +
                                        "Une fois le transfert effectué, envoyez-moi une capture d'écran à @SouPoudreuz.";
-            
             } else if (methodePaiement === "Carte Bancaire") {
                 instructionsPaiement = "💳 *Instructions pour la Carte Bancaire :*\n" +
                                        "Veuillez vous rendre sur notre site partenaire pour régler : [Lien du site](https://www.bitpay.com/buy-crypto)\n\n" +
@@ -96,19 +89,17 @@ bot.on('message', async (msg) => {
                                        "1. Allez sur le site.\n" +
                                        "2. Ecrivez un montant de " + total + "€.\n" +
                                        "3. Payez par CB et choisissez l'option simplex après avoir cliqué sur choisir l'offre.";
-            
             } else {
                 instructionsPaiement = "💵 *Instructions pour les Espèces :*\n" +
                                        "Merci de préparer l'appoint si possible lors de la livraison.";
             }
 
-            // A) Message POUR LE CLIENT (Confirmation)
+            // A) Message POUR LE CLIENT
             let messageAcheteur = `📝 *Résumé de votre commande :*\n\n${listeArticles}\n*Total : ${total}€*\n\n📍 *Adresse :* ${texteInfo}\n💳 *Paiement choisi :* ${methodePaiement}\n\n${instructionsPaiement}\n\nNous cherchons un livreur disponible... ⏳`;
             await bot.sendMessage(chatId, messageAcheteur, {parse_mode: 'Markdown'});
 
             // B) Message POUR LE GROUPE DES LIVREURS (Le QG)
             let pseudoClient = msg.from.username ? `@${msg.from.username}` : msg.from.first_name;
-            
             let messagePourLeGroupe = `🚨 NOUVELLE COMMANDE !\n\n` +
                                  `👤 Client : ${pseudoClient}\n` +
                                  `📍 Adresse : ${texteInfo}\n` +
@@ -116,7 +107,7 @@ bot.on('message', async (msg) => {
                                  `🛒 PANIER :\n${listeArticles}\n` +
                                  `💰 TOTAL : ${total}€`;
             
-            // Envoi au groupe avec les boutons pour prendre la course ou annuler
+            // Envoi au groupe avec les DEUX boutons
             await bot.sendMessage(idGroupeLivreurs, messagePourLeGroupe, {
                 reply_markup: {
                     inline_keyboard: [
@@ -132,21 +123,17 @@ bot.on('message', async (msg) => {
     }
 });
 
-
 // ==========================================
 // --- 4. GESTION DES BOUTONS LIVREURS ---
 // ==========================================
 bot.on('callback_query', (query) => {
-    // On récupère l'action (take ou done) et l'ID du client caché dans le bouton
     const action = query.data.split('_')[0]; 
     const idClient = query.data.split('_')[1]; 
     const nomLivreur = query.from.first_name;
 
     if (action === 'take') {
-        // 1. On prévient le client que le livreur arrive
         bot.sendMessage(idClient, `🛵 Bonne nouvelle ! Notre livreur ${nomLivreur} a pris en charge votre commande et est en route vers vous !`);
 
-        // 2. On modifie le message dans le groupe QG (on ajoute le bouton "Livré")
         const nouveauTexte = query.message.text + `\n\n➖➖➖➖➖➖\n🛵 Prise en charge par : ${nomLivreur}`;
         bot.editMessageText(nouveauTexte, {
             chat_id: query.message.chat.id,
@@ -161,10 +148,8 @@ bot.on('callback_query', (query) => {
         bot.answerCallbackQuery(query.id, { text: "C'est noté ! Fais bonne route 🛵" });
 
     } else if (action === 'done') {
-        // 1. On dit merci au client
         bot.sendMessage(idClient, `✅ Votre commande a été livrée ! Merci pour votre confiance et à très vite !`);
 
-        // 2. On valide définitivement la commande dans le QG
         const texteFinal = query.message.text + `\n✅ LIVRAISON TERMINÉE`;
         bot.editMessageText(texteFinal, {
             chat_id: query.message.chat.id,
@@ -173,17 +158,15 @@ bot.on('callback_query', (query) => {
         
         bot.answerCallbackQuery(query.id, { text: "Bien joué chef ! 👏" });
 
-        } else if (action === 'cancel') {
-        // 1. On prévient le client que la commande est annulée
+    } else if (action === 'cancel') {
+        // Le client est prévenu de l'annulation
         bot.sendMessage(idClient, `❌ Votre commande a été annulée. Si c'est une erreur, n'hésitez pas à nous contacter !`);
 
-        // 2. On SUPPRIME totalement le message du groupe QG pour faire le ménage
+        // Le message s'autodétruit dans le groupe des livreurs
         bot.deleteMessage(query.message.chat.id, query.message.message_id)
             .catch(err => console.log("Erreur de suppression :", err));
         
-        // Petite notification rapide sur l'écran de celui qui a cliqué
         bot.answerCallbackQuery(query.id, { text: "Commande annulée et supprimée ! 🗑️" });
-    }
     }
 });
 
