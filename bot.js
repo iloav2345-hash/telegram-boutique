@@ -1,5 +1,18 @@
 const TelegramBot = require('node-telegram-bot-api');
 
+// --- SYSTÈME ANTI-SOMMEIL POUR RENDER ---
+const http = require('http');
+const port = process.env.PORT || 3000;
+
+http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write("Le bot est reveille et pret a prendre des commandes !");
+    res.end();
+}).listen(port, () => {
+    console.log(`Serveur web allume sur le port ${port}`);
+});
+// ----------------------------------------
+
 // --- 1. TES INFORMATIONS (À REMPLIR) ---
 const token = process.env.TELEGRAM_TOKEN;
 const monIdAdmin = '932946637'; // Ton ID Telegram (donné par userinfobot)
@@ -104,3 +117,4 @@ bot.on('message', async (msg) => {
 
 
 console.log("✅ Le bot est lancé en local sur ton PC !");
+
