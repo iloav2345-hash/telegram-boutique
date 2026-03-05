@@ -1,45 +1,54 @@
 const TelegramBot = require('node-telegram-bot-api');
 
+// ==========================================
 // --- SYSTÈME ANTI-SOMMEIL POUR RENDER ---
+// ==========================================
 const http = require('http');
 const port = process.env.PORT || 3000;
 
-http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write("Le bot est reveille et pret a prendre des commandes !");
-    res.end();
-}).listen(port, () => {
-    console.log(`Serveur web allume sur le port ${port}`);
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Bot en ligne et fonctionnel !');
 });
-// ----------------------------------------
 
-// --- 1. TES INFORMATIONS (À REMPLIR) ---
+// Le "0.0.0.0" permet à Render de voir que le port est ouvert
+server.listen(port, '0.0.0.0', () => {
+    console.log(`Serveur web allumé sur le port ${port}`);
+});
+
+// ==========================================
+// --- 1. CONFIGURATION DU BOT ---
+// ==========================================
 const token = process.env.TELEGRAM_TOKEN;
-const monIdAdmin = '932946637'; // Ton ID Telegram (donné par userinfobot)
-const webAppUrl = 'https://iloav2345-hash.github.io/telegram-boutique/'; // Le lien de ta page GitHub
+
+// ⚠️ REMPLIS TON ID DE GROUPE ICI (N'oublie pas le tiret -)
+const idGroupeLivreurs = '-5160816980'; 
+
+const webAppUrl = 'https://iloav2345-hash.github.io/telegram-boutique/'; 
 
 // Création du bot
 const bot = new TelegramBot(token, {polling: true});
 
+
+// ==========================================
 // --- 2. COMMANDE /START ---
+// ==========================================
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     
-    // ✍️ TON MESSAGE PERSONNALISÉ EST ICI :
-    // Utilise \n pour sauter une ligne, et les étoiles * pour mettre en gras
     const messageBienvenue = 
         "👋 *Bienvenue chez CapBdv !*\n\n" +
         "Découvrez nos produits *exclusif* en direct. 🍫❄️\n" +
         "Livraison *rapide* et *discrète* garanties 🤝\n\n" +
-        "La mini app gère tout, choissez vos produits et validez le panier ✅\n\n" +
-        "On vous envoie un message pour vous indiquez l'heure et quand la commande est prête !📦\n\n" +
+        "La mini app gère tout, choisissez vos produits et validez le panier ✅\n\n" +
+        "On vous envoie un message pour vous indiquer l'heure et quand la commande est prête !📦\n\n" +
         "👇 *Cliquez sur le bouton ci-dessous pour ouvrir le menu :*";
 
     bot.sendMessage(chatId, messageBienvenue, {
-        parse_mode: 'Markdown', // On active le Markdown pour que les * fassent du gras
+        parse_mode: 'Markdown',
         reply_markup: {
             keyboard: [
-                // Tu peux aussi changer le texte du bouton ici si tu veux !
                 [{text: "Ouvrir la Boutique 🛍️", web_app: {url: webAppUrl}}]
             ],
             resize_keyboard: true
@@ -47,9 +56,12 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
+
+// ==========================================
 // --- 3. RÉCEPTION DE LA COMMANDE ---
+// ==========================================
 bot.on('message', async (msg) => {
-    if (msg.web_app_data?.data) {
+    if (msg.web_app_data && msg.web_app_data.data) {
         try {
             const data = JSON.parse(msg.web_app_data.data);
             const chatId = msg.chat.id; 
@@ -68,11 +80,10 @@ bot.on('message', async (msg) => {
 
             let texteInfo = infosClient ? infosClient : "Non renseignée";
 
-            // --- NOUVEAU : INSTRUCTIONS DE PAIEMENT SUR MESURE ---
+            // --- INSTRUCTIONS DE PAIEMENT SUR MESURE ---
             let instructionsPaiement = "";
 
             if (methodePaiement === "Crypto") {
-                // Le petit apostrophe inversé (`) permet au client de copier l'adresse en 1 clic sur Telegram !
                 instructionsPaiement = "🪙 *Instructions pour la Crypto :*\n" +
                                        "Veuillez envoyer le montant exact (USDT/BTC) à cette adresse :\n" +
                                        "`Bientot`\n\n" +
@@ -84,31 +95,36 @@ bot.on('message', async (msg) => {
                                        "*Comment faire ?*\n" +
                                        "1. Allez sur le site.\n" +
                                        "2. Ecrivez un montant de " + total + "€.\n" +
-                                       "3. Payez par CB et choissisez l'option simplex après avoir cliquez sur choisir l'offre.";
+                                       "3. Payez par CB et choisissez l'option simplex après avoir cliqué sur choisir l'offre.";
             
             } else {
                 instructionsPaiement = "💵 *Instructions pour les Espèces :*\n" +
                                        "Merci de préparer l'appoint si possible lors de la livraison.";
             }
-            // -----------------------------------------------------
 
-            // 1. Le message POUR LE CLIENT
-            let messageAcheteur = `📝 *Résumé de votre commande :*\n\n${listeArticles}\n*Total : ${total}€*\n\n📍 *Adresse :* ${texteInfo}\n💳 *Paiement choisi :* ${methodePaiement}\n\n${instructionsPaiement}\n\nJe vous contacte très vite pour finaliser !`;
+            // A) Message POUR LE CLIENT (Confirmation)
+            let messageAcheteur = `📝 *Résumé de votre commande :*\n\n${listeArticles}\n*Total : ${total}€*\n\n📍 *Adresse :* ${texteInfo}\n💳 *Paiement choisi :* ${methodePaiement}\n\n${instructionsPaiement}\n\nNous cherchons un livreur disponible... ⏳`;
             await bot.sendMessage(chatId, messageAcheteur, {parse_mode: 'Markdown'});
 
-            // 2. Le message POUR TOI (Le Vendeur)
-            let pseudoClient = msg.from.username ? `@${msg.from.username}` : "Pas de pseudo";
+            // B) Message POUR LE GROUPE DES LIVREURS (Le QG)
+            let pseudoClient = msg.from.username ? `@${msg.from.username}` : msg.from.first_name;
             
-            let messagePourMoi = `🚨 NOUVELLE COMMANDE !\n\n` +
+            let messagePourLeGroupe = `🚨 NOUVELLE COMMANDE !\n\n` +
                                  `👤 Client : ${pseudoClient}\n` +
                                  `📍 Adresse : ${texteInfo}\n` +
-                                 `💳 Paiement : ${methodePaiement}\n` +
-                                 `🆔 ID : ${chatId}\n\n` +
+                                 `💳 Paiement : ${methodePaiement}\n\n` +
                                  `🛒 PANIER :\n${listeArticles}\n` +
                                  `💰 TOTAL : ${total}€`;
             
-            await bot.sendMessage(monIdAdmin, messagePourMoi);
-            
+            // Envoi au groupe avec le bouton pour prendre la course
+            await bot.sendMessage(idGroupeLivreurs, messagePourLeGroupe, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: "✋ Je prends la course !", callback_data: `take_${chatId}` }]
+                    ]
+                }
+            });
+
         } catch (e) {
             console.error("Erreur de traitement :", e);
         }
@@ -116,5 +132,46 @@ bot.on('message', async (msg) => {
 });
 
 
-console.log("✅ Le bot est lancé en local sur ton PC !");
+// ==========================================
+// --- 4. GESTION DES BOUTONS LIVREURS ---
+// ==========================================
+bot.on('callback_query', (query) => {
+    // On récupère l'action (take ou done) et l'ID du client caché dans le bouton
+    const action = query.data.split('_')[0]; 
+    const idClient = query.data.split('_')[1]; 
+    const nomLivreur = query.from.first_name;
 
+    if (action === 'take') {
+        // 1. On prévient le client que le livreur arrive
+        bot.sendMessage(idClient, `🛵 Bonne nouvelle ! Notre livreur ${nomLivreur} a pris en charge votre commande et est en route vers vous !`);
+
+        // 2. On modifie le message dans le groupe QG (on ajoute le bouton "Livré")
+        const nouveauTexte = query.message.text + `\n\n➖➖➖➖➖➖\n🛵 Prise en charge par : ${nomLivreur}`;
+        bot.editMessageText(nouveauTexte, {
+            chat_id: query.message.chat.id,
+            message_id: query.message.message_id,
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: "✅ Marquer comme Livré", callback_data: `done_${idClient}` }]
+                ]
+            }
+        });
+        
+        bot.answerCallbackQuery(query.id, { text: "C'est noté ! Fais bonne route 🛵" });
+
+    } else if (action === 'done') {
+        // 1. On dit merci au client
+        bot.sendMessage(idClient, `✅ Votre commande a été livrée ! Merci pour votre confiance et à très vite !`);
+
+        // 2. On valide définitivement la commande dans le QG
+        const texteFinal = query.message.text + `\n✅ LIVRAISON TERMINÉE`;
+        bot.editMessageText(texteFinal, {
+            chat_id: query.message.chat.id,
+            message_id: query.message.message_id
+        });
+        
+        bot.answerCallbackQuery(query.id, { text: "Bien joué chef ! 👏" });
+    }
+});
+
+console.log("✅ Le bot est prêt et écoute les commandes !");
