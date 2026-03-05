@@ -116,11 +116,12 @@ bot.on('message', async (msg) => {
                                  `🛒 PANIER :\n${listeArticles}\n` +
                                  `💰 TOTAL : ${total}€`;
             
-            // Envoi au groupe avec le bouton pour prendre la course
+            // Envoi au groupe avec les boutons pour prendre la course ou annuler
             await bot.sendMessage(idGroupeLivreurs, messagePourLeGroupe, {
                 reply_markup: {
                     inline_keyboard: [
-                        [{ text: "✋ Je prends la course !", callback_data: `take_${chatId}` }]
+                        [{ text: "✋ Je prends la course !", callback_data: `take_${chatId}` }],
+                        [{ text: "❌ Annuler la commande", callback_data: `cancel_${chatId}` }]
                     ]
                 }
             });
@@ -171,6 +172,18 @@ bot.on('callback_query', (query) => {
         });
         
         bot.answerCallbackQuery(query.id, { text: "Bien joué chef ! 👏" });
+
+        } else if (action === 'cancel') {
+        // 1. On prévient le client que la commande est annulée
+        bot.sendMessage(idClient, `❌ Votre commande a été annulée. Si c'est une erreur, n'hésitez pas à nous contacter !`);
+
+        // 2. On SUPPRIME totalement le message du groupe QG pour faire le ménage
+        bot.deleteMessage(query.message.chat.id, query.message.message_id)
+            .catch(err => console.log("Erreur de suppression :", err));
+        
+        // Petite notification rapide sur l'écran de celui qui a cliqué
+        bot.answerCallbackQuery(query.id, { text: "Commande annulée et supprimée ! 🗑️" });
+    }
     }
 });
 
