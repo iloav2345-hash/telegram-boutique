@@ -1,0 +1,16 @@
+{
+  "name": "telegram-boutique",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "start": "node bot.js"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.67.0"
+  }
+}
